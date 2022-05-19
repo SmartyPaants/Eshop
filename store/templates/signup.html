@@ -4,13 +4,14 @@
 
 <div class="container">
     <div class="p-4 m-4">
-        <div class="col-lg-5 mx-auto">
-            <form action="">
-
+        <div class="col-lg-5 mx-auto alert alert-light border rounded m-4">
+            <h3 class="alert alert-light border rounded m-4">Create and Account</h3>
+            <form action="/signup" method="POST">
+                {% csrf_token %}
                 <!--firstname-->
                 <div class="form-group">
                     <label for="">First Name</label>
-                    <input type="text" name="firstname id="" class="form-control form-control-sm" placeholder="">
+                    <input type="text" name="firstname id=" class="form-control form-control-sm" placeholder="">
                                 
                 <!--lastname-->
                 <div class="form-group">

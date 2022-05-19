@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render
 from .models.product import Product
 from .models.category import Category
@@ -20,4 +21,7 @@ def index(request):
 
 
 def signup(request):
-    return render(request, 'signup.html')
+    if request.method == 'GET':
+        return render(request, 'signup.html')
+    else:
+        return HttpResponse(request.POST.get('email'))
