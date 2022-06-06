@@ -30,12 +30,48 @@ def signup(request):
         phone = request.POST.get('phone')
         email = request.POST.get('email')
         password = request.POST.get('password')
-        print(first_name, last_name, phone, email, password)
-        customer = Customer(first_name = first_name, 
-                            last_name = last_name, 
-                            phone = phone, 
-                            email = email, 
-                            password = password)
-        
-        customer.register()
-        return HttpResponse("Signup Successful")
+
+        # Validations
+        value = {
+            'first_name' : first_name,
+            'last_name' : last_name,
+            'phone' : phone,
+            'email' : email
+        }
+
+        error_message = None
+
+        if not first_name:
+            error_message = "First Name Required!!"
+        elif len(first_name) < 4:
+            error_message = "First Name Should Be At Least 4 Characters Long!!"
+        elif not last_name:
+            error_message = "Last Name Required!!"
+        elif len(last_name) < 4:
+            error_message = "Last Name Should Be At Least 4 Characters Long!!"
+        elif not phone:
+            error_message = "Phone Number Requried!!"
+        elif len(phone) < 10:
+            error_message = "Phone Number Should Be At Least 10 Digits Long!!"
+        elif len(password) < 6:
+            error_message = "Password Should Be At Least 6 Characters Long!!"
+        elif len(email) < 5:
+            error_message = "Email Should Be At Least 5 Characters Long!!"
+
+        # Saving
+        if not error_message:
+            print(first_name, last_name, phone, email, password)
+            customer = Customer(first_name = first_name, 
+                                last_name = last_name, 
+                                phone = phone, 
+                                email = email, 
+                                password = password)
+
+            customer.register()
+            return render(request, 'index.html')
+        else:
+            data = {
+                'error' : error_message,
+                'values' : value
+            }
+            return render(request, 'signup.html', data)
