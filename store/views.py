@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models.product import Product
 from .models.category import Category
 from .models.customer import Customer
@@ -41,6 +41,12 @@ def signup(request):
 
         error_message = None
 
+        customer = Customer(first_name = first_name, 
+                                last_name = last_name, 
+                                phone = phone, 
+                                email = email, 
+                                password = password)
+
         if not first_name:
             error_message = "First Name Required!!"
         elif len(first_name) < 4:
@@ -57,18 +63,16 @@ def signup(request):
             error_message = "Password Should Be At Least 6 Characters Long!!"
         elif len(email) < 5:
             error_message = "Email Should Be At Least 5 Characters Long!!"
+        elif customer.isExists():
+            error_message = 'Email is already used...'
 
         # Saving
         if not error_message:
             print(first_name, last_name, phone, email, password)
-            customer = Customer(first_name = first_name, 
-                                last_name = last_name, 
-                                phone = phone, 
-                                email = email, 
-                                password = password)
+            
 
             customer.register()
-            return render(request, 'index.html')
+            return redirect('homepage')
         else:
             data = {
                 'error' : error_message,
